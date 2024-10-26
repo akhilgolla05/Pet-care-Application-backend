@@ -22,4 +22,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     Optional<Review> findByVeterinarianIdAndPatientId(Long veterinarianId, Long reviewerId);
 
     boolean existsByVeterinarianIdAndPatientId(Long reviewerId, Long veterinarianId);
+
+    Long countByVeterinarianId(long id);
 }
