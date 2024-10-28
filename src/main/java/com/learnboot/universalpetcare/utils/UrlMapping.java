@@ -39,4 +39,5 @@ public class UrlMapping {
 
     public static final String VETERINARIANS = API+"/veterinarians";
     public static final String GET_ALL_VETS ="/get-all-veterinarians" ;
+    public static final String SEARCH_VETERINARIAN_FOR_APPOINTMENT = "/search-veterinarian" ;
 }
