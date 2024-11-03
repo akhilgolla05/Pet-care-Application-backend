@@ -18,7 +18,7 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.FOUND;
 import static org.springframework.http.ResponseEntity.ok;
-
+@CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
 @RequestMapping(UrlMapping.APPOINTMENTS)
 @RequiredArgsConstructor

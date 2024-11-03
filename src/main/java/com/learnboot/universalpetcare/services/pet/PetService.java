@@ -4,12 +4,14 @@ import com.learnboot.universalpetcare.exceptions.ResourceNotFoundException;
 import com.learnboot.universalpetcare.models.Pet;
 import com.learnboot.universalpetcare.repository.PetRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PetService implements IPetService{
 
     private final PetRepository petRepository;
@@ -42,5 +44,21 @@ public class PetService implements IPetService{
     public Pet getPetById(Long id) {
         return petRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pet not found"));
+    }
+
+    @Override
+    public List<String> getPetTypes(){
+        return petRepository.getDistinctPetTypes();
+    }
+
+    @Override
+    public List<String> getPetColors(){
+        return petRepository.getDistinctPetColors();
+    }
+
+    @Override
+    public List<String> getPetBreeds(String petType){
+        log.info("***************** petType : {} *********************", petType);
+        return petRepository.getDistinctPetBreedsByPetType(petType);
     }
 }

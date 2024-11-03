@@ -7,16 +7,18 @@ import com.learnboot.universalpetcare.services.pet.IPetService;
 import com.learnboot.universalpetcare.utils.FeedBackMessage;
 import com.learnboot.universalpetcare.utils.UrlMapping;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URL;
 import java.util.List;
-
+@CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
 @RequestMapping(UrlMapping.PETS)
 @RequiredArgsConstructor
+@Slf4j
 public class PetController {
 
     private final IPetService petService;
@@ -75,6 +77,24 @@ public class PetController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(e.getMessage(), null));
         }
+    }
+
+
+    @GetMapping(UrlMapping.GET_PET_TYPES)
+    public ResponseEntity<ApiResponse> getAllPetTypes(){
+        return ResponseEntity.ok(new ApiResponse(FeedBackMessage.FOUND,petService.getPetTypes()));
+    }
+
+    @GetMapping(UrlMapping.GET_PET_COLORS)
+    public ResponseEntity<ApiResponse> getAllPetColors(){
+        return ResponseEntity.ok(new ApiResponse(FeedBackMessage.FOUND,petService.getPetColors()));
+    }
+
+    @GetMapping(UrlMapping.GET_PET_BREEDS)
+
+    public ResponseEntity<ApiResponse> getAllPetColors(@RequestParam String petType){
+        log.info("***************** petType : {} *********************", petType);
+        return ResponseEntity.ok(new ApiResponse(FeedBackMessage.FOUND,petService.getPetBreeds(petType)));
     }
 
 }

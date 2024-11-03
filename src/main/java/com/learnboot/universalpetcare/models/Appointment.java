@@ -36,7 +36,6 @@ public class Appointment {
     @CreationTimestamp
     private LocalDate createdAt;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender")
     private User patient;
