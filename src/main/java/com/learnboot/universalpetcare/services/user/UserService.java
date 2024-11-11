@@ -8,6 +8,7 @@ import com.learnboot.universalpetcare.exceptions.ResourceNotFoundException;
 import com.learnboot.universalpetcare.factory.UserFactory;
 import com.learnboot.universalpetcare.models.Review;
 import com.learnboot.universalpetcare.models.User;
+import com.learnboot.universalpetcare.repository.ReviewRepository;
 import com.learnboot.universalpetcare.repository.UserRepository;
 import com.learnboot.universalpetcare.request.RegistrationRequest;
 import com.learnboot.universalpetcare.request.UserUpdateRequest;
@@ -33,6 +34,7 @@ public class UserService implements IUserService {
     private final AppointmentService appointmentService;
     private final IPhotoService photoService;
     private final ReviewService reviewService;
+    private final ReviewRepository reviewRepository;
 
     @Override
     public User addUser(RegistrationRequest request) {
@@ -79,6 +81,9 @@ public class UserService implements IUserService {
         User user = findById(userId);
         //convert user to userDto
         UserDto userDto = entityConverter.convertEntityToDto(user,UserDto.class);
+
+        //set all reviewers
+        userDto.setTotalReviewers(reviewRepository.countByVeterinarianId(userId));
         //get the User Appointment
         setUserAppointments(userDto);
         //set user photo
@@ -107,6 +112,7 @@ public class UserService implements IUserService {
 
         if(!reviewDtos.isEmpty()) {
             double averageRating = reviewService.getAverageRatingForVeterinarian(userId);
+            userDto.setAverageRating(averageRating);
         }
         userDto.setReviews(reviewDtos);
     }

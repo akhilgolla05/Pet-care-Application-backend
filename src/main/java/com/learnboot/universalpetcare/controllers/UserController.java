@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
 @RequestMapping(UrlMapping.USERS)
 @RequiredArgsConstructor
@@ -63,8 +64,8 @@ public class UserController {
            // User user = userService.findById(userId);
             UserDto userDto = userService.getUserWithDetails(userId);
             //UserDto userDto = entityConverter.convertEntityToDto(user, UserDto.class);
-            return ResponseEntity.status(HttpStatus.FOUND)
-                    .body(new ApiResponse(FeedBackMessage.FOUND,userDto));
+            return ResponseEntity
+                    .ok(new ApiResponse(FeedBackMessage.FOUND,userDto));
         }catch (ResourceNotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse(ex.getMessage(),null));
