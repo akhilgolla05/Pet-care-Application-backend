@@ -9,7 +9,6 @@ import com.learnboot.universalpetcare.models.Appointment;
 import com.learnboot.universalpetcare.models.Pet;
 import com.learnboot.universalpetcare.models.User;
 import com.learnboot.universalpetcare.repository.AppointmentRepository;
-import com.learnboot.universalpetcare.repository.PetRepository;
 import com.learnboot.universalpetcare.repository.UserRepository;
 import com.learnboot.universalpetcare.request.AppointmentUpdateRequest;
 import com.learnboot.universalpetcare.request.BookAppointmentRequest;
@@ -132,5 +131,31 @@ public class AppointmentService implements IAppointmentService {
                     appointmentDto.setPets(petDtos);
                     return appointmentDto;
                 }).toList();
+    }
+
+    @Override
+    public Appointment cancelAppointment(Long appointmentId) {
+        return appointmentRepository.findById(appointmentId)
+                .filter(appointment -> appointment.getStatus().equals(AppointmentStatus.WAITING_FOR_APPROVAL))
+                .map(appointment -> {appointment.setStatus(AppointmentStatus.CANCELLED);
+                return appointmentRepository.save(appointment);}
+                ).orElseThrow(()-> new IllegalStateException("Error Cancelling Appointment"));
+    }
+
+    @Override
+    public Appointment approveAppointment(Long appointmentId) {
+        return appointmentRepository.findById(appointmentId)
+                .filter(appointment -> !appointment.getStatus().equals(AppointmentStatus.APPROVED))
+                .map(appointment -> {appointment.setStatus(AppointmentStatus.APPROVED);
+                    return appointmentRepository.save(appointment);}
+                ).orElseThrow(()-> new IllegalStateException("Appointment Already Approved"));
+    }
+
+    @Override
+    public Appointment declineAppointment(Long appointmentId) {
+        return appointmentRepository.findById(appointmentId)
+                .map(appointment -> {appointment.setStatus(AppointmentStatus.NOT_APPROVED);
+                    return appointmentRepository.save(appointment);}
+                ).orElseThrow(()-> new ResourceNotFoundException("Appointment Not Found!"));
     }
 }

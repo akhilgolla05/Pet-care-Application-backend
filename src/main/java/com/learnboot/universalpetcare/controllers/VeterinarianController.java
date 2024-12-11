@@ -54,4 +54,10 @@ public class VeterinarianController {
                    .body(new ApiResponse("Something Went Wrong!",null));
        }
     }
+
+    @GetMapping("/specializations")
+    public ResponseEntity<ApiResponse> getAllSpecializations(){
+        List<String> specializations = veterinarianService.getAllVetSpecializations();
+        return ResponseEntity.ok(new ApiResponse(FeedBackMessage.FOUND, specializations));
+    }
 }

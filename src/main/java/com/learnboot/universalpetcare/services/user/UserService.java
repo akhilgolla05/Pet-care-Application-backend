@@ -6,8 +6,10 @@ import com.learnboot.universalpetcare.dto.ReviewDto;
 import com.learnboot.universalpetcare.dto.UserDto;
 import com.learnboot.universalpetcare.exceptions.ResourceNotFoundException;
 import com.learnboot.universalpetcare.factory.UserFactory;
+import com.learnboot.universalpetcare.models.Appointment;
 import com.learnboot.universalpetcare.models.Review;
 import com.learnboot.universalpetcare.models.User;
+import com.learnboot.universalpetcare.repository.AppointmentRepository;
 import com.learnboot.universalpetcare.repository.ReviewRepository;
 import com.learnboot.universalpetcare.repository.UserRepository;
 import com.learnboot.universalpetcare.request.RegistrationRequest;
@@ -35,6 +37,7 @@ public class UserService implements IUserService {
     private final IPhotoService photoService;
     private final ReviewService reviewService;
     private final ReviewRepository reviewRepository;
+    private final AppointmentRepository appointmentRepository;
 
     @Override
     public User addUser(RegistrationRequest request) {
@@ -61,7 +64,13 @@ public class UserService implements IUserService {
     @Override
     public void deleteUser(long userId) {
         userRepository.findById(userId)
-                .ifPresentOrElse(userRepository::delete,
+                .ifPresentOrElse(userToDelete->{
+                    List<Review> reviews = reviewRepository.findAllByUserId(userId);
+                    reviewRepository.deleteAll(reviews);
+                    List<Appointment> appointments = appointmentRepository.findAllByUserId(userId);
+                    appointmentRepository.deleteAll(appointments);
+                    userRepository.deleteById(userId);
+                        },
                         ()-> {
                     throw new ResourceNotFoundException("User Not Found");
                         });

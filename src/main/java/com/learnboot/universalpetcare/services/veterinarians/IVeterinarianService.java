@@ -14,4 +14,6 @@ public interface IVeterinarianService {
     List<UserDto> findAvailableVetForAppointment(String specialization, LocalDate date, LocalTime time);
 
     List<Veterinarian> getAllVeterinariansBySpecialization(String specialization);
+
+    List<String> getAllVetSpecializations();
 }

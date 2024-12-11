@@ -103,4 +103,9 @@ public class VeterinarianService implements IVeterinarianService {
 
         return !requestedStartTime.isBefore(unAvailableStartTime) && !requestedEndTime.isAfter(unAvailableEndTime);
     }
+
+    @Override
+    public List<String> getAllVetSpecializations(){
+        return veterinarianRepository.findAllVetSpecialization();
+    }
 }

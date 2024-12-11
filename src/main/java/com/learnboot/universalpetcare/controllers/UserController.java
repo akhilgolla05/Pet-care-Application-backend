@@ -5,9 +5,11 @@ import com.learnboot.universalpetcare.dto.UserDto;
 import com.learnboot.universalpetcare.exceptions.ResourceNotFoundException;
 import com.learnboot.universalpetcare.exceptions.UserAlreadyExistsException;
 import com.learnboot.universalpetcare.models.User;
+import com.learnboot.universalpetcare.request.ChangePasswordRequest;
 import com.learnboot.universalpetcare.request.RegistrationRequest;
 import com.learnboot.universalpetcare.request.UserUpdateRequest;
 import com.learnboot.universalpetcare.response.ApiResponse;
+import com.learnboot.universalpetcare.services.password.IChangePasswordService;
 import com.learnboot.universalpetcare.services.user.UserService;
 import com.learnboot.universalpetcare.utils.FeedBackMessage;
 import com.learnboot.universalpetcare.utils.UrlMapping;
@@ -26,6 +28,7 @@ public class UserController {
 
     private final UserService userService;
     private final EntityConverter<User, UserDto> entityConverter;
+    private final IChangePasswordService changePasswordService;
 
     @PostMapping(UrlMapping.REGISTER_USER)
     public ResponseEntity<ApiResponse> register(@RequestBody RegistrationRequest request) {
@@ -43,7 +46,7 @@ public class UserController {
     }
 
     @PutMapping(UrlMapping.UPDATE_USER)
-    public ResponseEntity<ApiResponse> updateUser(@PathVariable("id") long userId,
+    public ResponseEntity<ApiResponse> updateUser(@PathVariable() long userId,
                                                   @RequestBody UserUpdateRequest request) {
         try{
             User user = userService.updateUser(userId, request);
@@ -95,6 +98,24 @@ public class UserController {
        List<UserDto> userDtoList =  userService.getAllUsers();
        return ResponseEntity.status(HttpStatus.FOUND)
                .body(new ApiResponse(FeedBackMessage.FOUND,userDtoList));
+    }
+
+
+    @PutMapping(UrlMapping.CHANGE_PASSWORD)
+    public ResponseEntity<ApiResponse> changePassword(@PathVariable long userId,
+                                                      @RequestBody ChangePasswordRequest request){
+        try{
+            changePasswordService.changePassword(userId,request);
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.UPDATED,null));
+        }catch(IllegalArgumentException ex){
+            return ResponseEntity.badRequest().body(new ApiResponse(ex.getMessage(),null));
+        }catch (ResourceNotFoundException ex){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse(ex.getMessage(),null));
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(e.getMessage(),null));
+        }
     }
 
 

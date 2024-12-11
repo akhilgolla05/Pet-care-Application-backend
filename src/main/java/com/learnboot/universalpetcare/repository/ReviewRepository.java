@@ -16,6 +16,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     @Query("SELECT r FROM Review r WHERE r.patient.id =: userId OR r.veterinarian.id =:userId")
     Page<Review> findAllByUserId(@Param("userId") long userId, Pageable pageable);
 
+    @Query("SELECT r FROM Review r WHERE r.patient.id =: userId OR r.veterinarian.id =:userId")
+    List<Review> findAllByUserId(@Param("userId") long userId);
+
     List<Review> findByVeterinarianId(long veterinarianId);
 
     //@Query("SELECT r FROM Review r where r.veterinarian.id=:veterinarianId AND r.patient.id=:reviewerId")

@@ -22,4 +22,9 @@ public interface IAppointmentService {
     Appointment getAppointmentById(Long appointmentId);
     Appointment getAppointmentByAppointmentNo(String appointmentNo);
 
+    Appointment cancelAppointment(Long appointmentId);
+
+    Appointment approveAppointment(Long appointmentId);
+
+    Appointment declineAppointment(Long appointmentId);
 }
