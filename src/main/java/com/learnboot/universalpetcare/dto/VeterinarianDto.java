@@ -10,5 +10,6 @@ public class VeterinarianDto {
     private String gender;
     private String phoneNumber;
     private String email;
+    private String isActive;
     private String specialization;
 }

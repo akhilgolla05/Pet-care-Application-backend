@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
@@ -59,5 +60,11 @@ public class VeterinarianController {
     public ResponseEntity<ApiResponse> getAllSpecializations(){
         List<String> specializations = veterinarianService.getAllVetSpecializations();
         return ResponseEntity.ok(new ApiResponse(FeedBackMessage.FOUND, specializations));
+    }
+
+    @GetMapping("/vet/get-by-specialization")
+    public ResponseEntity<List<Map<String,Object>>> aggregateVetsBySpecialization(){
+        List<Map<String,Object>> aggregatedVets =  veterinarianService.aggregateVetsBySpecialization();
+        return  ResponseEntity.ok(aggregatedVets);
     }
 }

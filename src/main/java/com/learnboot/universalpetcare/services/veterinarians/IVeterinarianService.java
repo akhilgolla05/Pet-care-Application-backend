@@ -6,6 +6,7 @@ import com.learnboot.universalpetcare.models.Veterinarian;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 public interface IVeterinarianService {
 
@@ -16,4 +17,6 @@ public interface IVeterinarianService {
     List<Veterinarian> getAllVeterinariansBySpecialization(String specialization);
 
     List<String> getAllVetSpecializations();
+
+    List<Map<String,Object>> aggregateVetsBySpecialization();
 }

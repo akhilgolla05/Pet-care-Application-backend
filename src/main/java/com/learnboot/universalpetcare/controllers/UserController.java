@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = {"http://localhost:5173"})
 @RestController
@@ -117,6 +118,54 @@ public class UserController {
                     .body(new ApiResponse(e.getMessage(),null));
         }
     }
+
+    @GetMapping(UrlMapping.COUNT_ALL_VETS)
+    public long countVeterinarians(){
+        return userService.countVeterinarians();
+    }
+    @GetMapping(UrlMapping.COUNT_ALL_PATIENTS)
+    public long countPatients(){
+        return userService.countPatients();
+    }
+
+    @GetMapping(UrlMapping.COUNT_ALL_USERS)
+    public long countUsers(){
+        return userService.countAllUsers();
+    }
+
+    @GetMapping(UrlMapping.AGGREGATE_USERS)
+    public ResponseEntity<ApiResponse> aggregateUsersByMonthAndType(){
+        try{
+            Map<String, Map<String,Long>> aggregate =  userService.aggregateUsersByMonthAndType();
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.FOUND,aggregate));
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(new ApiResponse(ex.getMessage(),null));
+        }
+    }
+
+    @GetMapping(UrlMapping.AGGREGATE_USERS_BY_STATUS)
+    public ResponseEntity<ApiResponse> aggregateUsersByAccountStatusAndType(){
+        try{
+            Map<String, Map<String,Long>> aggregate =  userService.aggregateUsersByEnabledStatusAndType();
+            return ResponseEntity.ok(new ApiResponse(FeedBackMessage.FOUND,aggregate));
+        }catch (Exception ex){
+            return ResponseEntity.badRequest().body(new ApiResponse(ex.getMessage(),null));
+        }
+    }
+
+    @PutMapping("account/{userId}/lock-user-account")
+    public ResponseEntity<ApiResponse> lockUserAccount(@PathVariable long userId){
+        userService.lockUserAccount(userId);
+        return ResponseEntity.ok(new ApiResponse("User Account Locked Successfully", null));
+    }
+
+    @PutMapping("account/{userId}/unLock-user-account")
+    public ResponseEntity<ApiResponse> unLockUserAccount(@PathVariable long userId){
+        userService.unLockUserAccount(userId);
+        return ResponseEntity.ok(new ApiResponse("User Account UnLocked Successfully", null));
+    }
+
+
 
 
 }

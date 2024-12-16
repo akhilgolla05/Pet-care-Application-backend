@@ -9,6 +9,12 @@ public class UrlMapping {
     public static final String GET_USER_BY_ID = "/user/{userId}";
     public static final String DELETE_USER_BY_ID = "/user/{userId}/delete" ;
     public static final String GET_ALL_USERS = "/all-users";
+    public static final String AGGREGATE_USERS = "/aggregated-users";
+    public static final String COUNT_ALL_VETS = "/count/veterinarians";
+    public static final String COUNT_ALL_PATIENTS = "/count/patients";
+    public static final String COUNT_ALL_USERS = "/count/users";
+    public static final String AGGREGATE_USERS_BY_STATUS = "/account/aggregated-by-status";
+
 
     public static final String APPOINTMENTS = API+"/appointments";
     public static final String ALL_APPOINTMENTS = "/all";
@@ -20,6 +26,9 @@ public class UrlMapping {
     public static final String CANCEL_APPOINTMENT = "/appointment/{id}/cancel";
     public static final String DECLINE_APPOINTMENT = "/appointment/{id}/decline";
     public static final String APPROVE_APPOINTMENT = "/appointment/{id}/approve";
+    public static final String COUNT_ALL_APPOINTMENTS = "/count/appointments";
+    public static final String GET_APPOINTMENTS_SUMMARY = "/summary/appointments-summary";
+
 
     public static final String PETS = API+"/pets";
     public static final String SAVE_PETS = "/save-pets" ;
@@ -30,11 +39,13 @@ public class UrlMapping {
     public static final String GET_PET_COLORS = "/get-pet-colors";
     public static final String GET_PET_BREEDS = "/get-pet-breeds";
 
+
     public static final String PHOTOS = API+"/photos";
     public static final String GET_PHOTO_BY_ID = "/photo/{photoId}/photo";
     public static final String DELETE_PHOTO = "/photo/{photoId}/user/{userId}/delete";
     public static final String UPDATE_PHOTO = "/photo/{photoId}/update";
     public static final String UPLOAD_PHOTO = "/photo/upload";
+
 
     public static final String REVIEWS = API+"/reviews" ;
     public static final String SUBMIT_REVIEW = "/submit-review" ;
@@ -43,11 +54,14 @@ public class UrlMapping {
     public static final String DELETE_REVIEW = "/review/{reviewId}/delete";
     public static final String GET_AVG_RATING_FOR_VET = "/vet/{vetId}/get-average-rating";
 
+
     public static final String VETERINARIANS = API+"/veterinarians";
     public static final String GET_ALL_VETS ="/get-all-veterinarians" ;
     public static final String SEARCH_VETERINARIAN_FOR_APPOINTMENT = "/search-veterinarian" ;
 
+
     public static final String CHANGE_PASSWORD = "/user/{userId}/change-password";
+
 
 
 }

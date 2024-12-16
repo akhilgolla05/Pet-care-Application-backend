@@ -18,6 +18,8 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -107,5 +109,14 @@ public class VeterinarianService implements IVeterinarianService {
     @Override
     public List<String> getAllVetSpecializations(){
         return veterinarianRepository.findAllVetSpecialization();
+    }
+
+    @Override
+    public List<Map<String,Object>> aggregateVetsBySpecialization(){
+        List<Object[]> results = veterinarianRepository.countVetsBySpecialization();
+        return results.stream()
+                .map(result->Map.of("specialization",result[0], "count",result[1]))
+                .collect(Collectors.toList());
+
     }
 }

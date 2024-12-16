@@ -5,6 +5,7 @@ import com.learnboot.universalpetcare.request.AppointmentUpdateRequest;
 import com.learnboot.universalpetcare.request.BookAppointmentRequest;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IAppointmentService {
 
@@ -27,4 +28,8 @@ public interface IAppointmentService {
     Appointment approveAppointment(Long appointmentId);
 
     Appointment declineAppointment(Long appointmentId);
+
+    long countAppointments();
+
+    List<Map<String,Object>> getAppointmentsSummary();
 }

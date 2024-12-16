@@ -15,4 +15,7 @@ public interface VeterinarianRepository extends JpaRepository<Veterinarian, Long
 
     @Query("select distinct v.specialization from Veterinarian v")
     List<String> findAllVetSpecialization();
+
+    @Query("select v.specialization as specialization, count(v) as count from Veterinarian v group by v.specialization")
+    List<Object[]> countVetsBySpecialization();
 }

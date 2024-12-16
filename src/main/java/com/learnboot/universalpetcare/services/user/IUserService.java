@@ -7,6 +7,7 @@ import com.learnboot.universalpetcare.request.UserUpdateRequest;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface IUserService {
 
@@ -22,4 +23,18 @@ public interface IUserService {
     List<UserDto> getAllUsers();
 
     UserDto getUserWithDetails(long userId) throws SQLException;
+
+    long countVeterinarians();
+
+    long countPatients();
+
+    long countAllUsers();
+
+    Map<String, Map<String,Long>> aggregateUsersByMonthAndType();
+
+    Map<String, Map<String, Long>> aggregateUsersByEnabledStatusAndType();
+
+    void lockUserAccount(long userId);
+
+    void unLockUserAccount(long userId);
 }

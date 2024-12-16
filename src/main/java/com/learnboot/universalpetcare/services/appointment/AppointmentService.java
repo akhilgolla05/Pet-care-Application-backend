@@ -22,9 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -157,5 +156,33 @@ public class AppointmentService implements IAppointmentService {
                 .map(appointment -> {appointment.setStatus(AppointmentStatus.NOT_APPROVED);
                     return appointmentRepository.save(appointment);}
                 ).orElseThrow(()-> new ResourceNotFoundException("Appointment Not Found!"));
+    }
+
+    @Override
+    public long countAppointments(){
+        return appointmentRepository.count();
+    }
+
+    @Override
+    public List<Map<String,Object>> getAppointmentsSummary(){
+        return getAllAppoints()
+                .stream()
+                .collect(Collectors.groupingBy(Appointment::getStatus,Collectors.counting()))
+                .entrySet()
+                .stream()
+                .filter(entry->entry.getValue()>0)
+                .map(entry->createStatusSummaryMap(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
+    }
+
+    private Map<String,Object> createStatusSummaryMap(AppointmentStatus status, long value){
+        Map<String,Object> summary = new HashMap<>();
+        summary.put("name",formatAppointmentStatus(status));
+        summary.put("value",value);
+        return summary;
+    }
+
+    private String formatAppointmentStatus(AppointmentStatus appointmentStatus) {
+        return appointmentStatus.toString().replace("_","-").toLowerCase();
     }
 }

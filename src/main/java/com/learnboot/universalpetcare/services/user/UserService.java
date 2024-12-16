@@ -18,12 +18,15 @@ import com.learnboot.universalpetcare.services.appointment.AppointmentService;
 import com.learnboot.universalpetcare.services.photo.IPhotoService;
 import com.learnboot.universalpetcare.services.review.ReviewService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.time.Month;
+import java.time.format.TextStyle;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -179,5 +182,48 @@ public class UserService implements IUserService {
         }else{
             reviewDto.setVetImage(null);
         }
+    }
+
+    @Override
+    public long countVeterinarians(){
+        return userRepository.countByUserType("VET");
+    }
+
+    @Override
+    public long countPatients(){
+        return userRepository.countByUserType("PATIENT");
+    }
+
+    @Override
+    public long countAllUsers(){
+        return userRepository.count();
+    }
+
+    @Override
+    public Map<String, Map<String,Long>> aggregateUsersByMonthAndType(){
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .collect(Collectors.groupingBy(user-> Month.of(user.getCreatedAt().getMonthValue())
+                        .getDisplayName(TextStyle.FULL, Locale.ENGLISH),
+                        Collectors.groupingBy(User::getUserType,Collectors.counting())
+                ));
+    }
+
+    @Override
+    public Map<String, Map<String, Long>> aggregateUsersByEnabledStatusAndType() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .collect(Collectors.groupingBy(user -> user.isActive() ? "Enabled" : "Non-Enabled",
+                        Collectors.groupingBy(User::getUserType, Collectors.counting())));
+    }
+
+    @Override
+    public void lockUserAccount(long userId){
+        userRepository.updateUserEnabledStatus(userId, false);
+    }
+
+    @Override
+    public void unLockUserAccount(long userId){
+        userRepository.updateUserEnabledStatus(userId, true);
     }
 }
