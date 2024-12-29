@@ -10,7 +10,7 @@ public class EmailProperties {
     public static final String DEFAULT_SENDER = "gollaakhil1115@gmail.com";
     public static final String DEFAULT_USERNAME = "gollaakhil1115@gmail.com";
     //app-password
-    public static final String DEFAULT_PASSWORD = "rrex ufrf ehvt mrxv";
+    public static final String DEFAULT_PASSWORD = "nnnn nnnn nnnn nnnn";
     public static final boolean DEFAULT_AUTH = true;
     public static final boolean DEFAULT_STARTTLS = true;
 }
