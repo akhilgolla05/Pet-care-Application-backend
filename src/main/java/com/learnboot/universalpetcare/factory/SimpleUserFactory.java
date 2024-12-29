@@ -5,6 +5,7 @@ import com.learnboot.universalpetcare.models.User;
 import com.learnboot.universalpetcare.repository.UserRepository;
 import com.learnboot.universalpetcare.request.RegistrationRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,12 +16,16 @@ public class SimpleUserFactory implements UserFactory {
     private final AdminFactory adminFactory;
     private final PatientFactory patientFactory;
     private final VeterinarianFactory veterinarianFactory;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User createUser(RegistrationRequest request) {
         if(userRepository.existsByEmail(request.getEmail())){
             throw new UserAlreadyExistsException(request.getEmail()+" Already Exists!");
         }
+
+        request.setPassword(passwordEncoder.encode(request.getPassword()));
+
 
         switch (request.getUserType()){
 

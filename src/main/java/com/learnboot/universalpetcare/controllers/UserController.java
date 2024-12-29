@@ -2,6 +2,7 @@ package com.learnboot.universalpetcare.controllers;
 
 import com.learnboot.universalpetcare.dto.EntityConverter;
 import com.learnboot.universalpetcare.dto.UserDto;
+import com.learnboot.universalpetcare.event.RegistrationCompleteEvent;
 import com.learnboot.universalpetcare.exceptions.ResourceNotFoundException;
 import com.learnboot.universalpetcare.exceptions.UserAlreadyExistsException;
 import com.learnboot.universalpetcare.models.User;
@@ -14,6 +15,7 @@ import com.learnboot.universalpetcare.services.user.UserService;
 import com.learnboot.universalpetcare.utils.FeedBackMessage;
 import com.learnboot.universalpetcare.utils.UrlMapping;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +32,13 @@ public class UserController {
     private final UserService userService;
     private final EntityConverter<User, UserDto> entityConverter;
     private final IChangePasswordService changePasswordService;
+    private final ApplicationEventPublisher publisher;
 
     @PostMapping(UrlMapping.REGISTER_USER)
     public ResponseEntity<ApiResponse> register(@RequestBody RegistrationRequest request) {
         try {
             User user =  userService.addUser(request);
+            publisher.publishEvent(new RegistrationCompleteEvent(user));
            UserDto userDto =  entityConverter.convertEntityToDto(user, UserDto.class);
             return ResponseEntity.ok(new ApiResponse(FeedBackMessage.SUCCESS,userDto));
         } catch (UserAlreadyExistsException e) {

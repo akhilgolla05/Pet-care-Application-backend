@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
@@ -22,4 +23,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("update User u set u.isActive = :enabled where u.id = :userId")
     void updateUserEnabledStatus(@Param("userId") Long userId, @Param("enabled") boolean enabled);
+
+    Optional<User> findByEmail(String username);
 }

@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 @Getter
@@ -44,8 +46,18 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Photo photo;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH,
+            CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id",referencedColumnName ="id" ),
+    inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles = new HashSet<>();
+
     @Transient
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VerificationToken> verificationTokens = new ArrayList<>();
 
     public void removeUserPhoto(){
         if(this.getPhoto() != null){
